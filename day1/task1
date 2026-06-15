@@ -1,0 +1,102 @@
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Profile Card App',
+      home: Scaffold(
+        backgroundColor: Colors.blueGrey[50],
+        appBar: AppBar(
+          title: const Text('Profile Card'),
+          centerTitle: true,
+          backgroundColor: Colors.blue,
+        ),
+        body: Center(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.person,
+                  size: 100,
+                  color: Colors.blue,
+                ),
+
+                const SizedBox(height: 15),
+
+                const Text(
+                  'Almir Maloku',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                const Text(
+                  'Flutter Intern',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.email, color: Colors.red),
+                    SizedBox(width: 10),
+                    Text('almirmaloku.r@gmail.com'),
+                  ],
+                ),
+
+                const SizedBox(height: 10),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.location_on, color: Colors.green),
+                    SizedBox(width: 10),
+                    Text('Prishtinë, Kosovë'),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Contact Me'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
