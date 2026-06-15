@@ -1,0 +1,212 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const GradeCalculatorApp());
+}
+
+class GradeCalculatorApp extends StatelessWidget {
+  const GradeCalculatorApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Grade Calculator UI',
+      home: const GradeCalculatorScreen(),
+    );
+  }
+}
+
+class GradeCalculatorScreen extends StatefulWidget {
+  const GradeCalculatorScreen({super.key});
+
+  @override
+  State<GradeCalculatorScreen> createState() => _GradeCalculatorScreenState();
+}
+
+class _GradeCalculatorScreenState extends State<GradeCalculatorScreen> {
+  final TextEditingController grade1Controller = TextEditingController();
+  final TextEditingController grade2Controller = TextEditingController();
+  final TextEditingController grade3Controller = TextEditingController();
+
+  String resultText = 'Enter three grades to calculate the average.';
+  String statusText = '';
+
+  void calculateAverage() {
+    String grade1Text = grade1Controller.text;
+    String grade2Text = grade2Controller.text;
+    String grade3Text = grade3Controller.text;
+
+    if (grade1Text.isEmpty || grade2Text.isEmpty || grade3Text.isEmpty) {
+      setState(() {
+        resultText = 'Please fill in all three fields.';
+        statusText = '';
+      });
+      return;
+    }
+
+    double? grade1 = double.tryParse(grade1Text);
+    double? grade2 = double.tryParse(grade2Text);
+    double? grade3 = double.tryParse(grade3Text);
+
+    if (grade1 == null || grade2 == null || grade3 == null) {
+      setState(() {
+        resultText = 'Please enter only valid numbers.';
+        statusText = '';
+      });
+      return;
+    }
+
+    double average = (grade1 + grade2 + grade3) / 3;
+
+    setState(() {
+      resultText = 'Average: ${average.toStringAsFixed(2)}';
+
+      if (average >= 50) {
+        statusText = 'Status: Kalon';
+      } else {
+        statusText = 'Status: Duhet përmirësim';
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5EFE6),
+      appBar: AppBar(
+        title: const Text('Grade Calculator'),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        centerTitle: true,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            width: 360,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(22),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.15),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.calculate,
+                  size: 60,
+                  color: Colors.black,
+                ),
+
+                const SizedBox(height: 12),
+
+                const Text(
+                  'Grade Calculator UI',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                const Text(
+                  'Enter three grades or points to calculate the average.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+
+                const SizedBox(height: 22),
+
+                TextField(
+                  controller: grade1Controller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Grade 1',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.looks_one),
+                  ),
+                ),
+
+                const SizedBox(height: 14),
+
+                TextField(
+                  controller: grade2Controller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Grade 2',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.looks_two),
+                  ),
+                ),
+
+                const SizedBox(height: 14),
+
+                TextField(
+                  controller: grade3Controller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Grade 3',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.looks_3),
+                  ),
+                ),
+
+                const SizedBox(height: 22),
+
+                ElevatedButton.icon(
+                  onPressed: calculateAverage,
+                  icon: const Icon(Icons.done),
+                  label: const Text('Calculate Average'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 14,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 22),
+
+                Text(
+                  resultText,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  statusText,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
