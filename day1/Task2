@@ -1,0 +1,185 @@
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const GradeCalculatorApp());
+}
+
+class GradeCalculatorApp extends StatelessWidget {
+  const GradeCalculatorApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Grade Calculator',
+      home: const GradeCalculatorScreen(),
+    );
+  }
+}
+
+class GradeCalculatorScreen extends StatefulWidget {
+  const GradeCalculatorScreen({super.key});
+
+  @override
+  State<GradeCalculatorScreen> createState() => _GradeCalculatorScreenState();
+}
+
+class _GradeCalculatorScreenState extends State<GradeCalculatorScreen> {
+  final TextEditingController grade1Controller = TextEditingController();
+  final TextEditingController grade2Controller = TextEditingController();
+  final TextEditingController grade3Controller = TextEditingController();
+
+  String resultText = '';
+  String statusText = '';
+
+  void calculateAverage() {
+    String grade1Text = grade1Controller.text;
+    String grade2Text = grade2Controller.text;
+    String grade3Text = grade3Controller.text;
+
+    if (grade1Text.isEmpty || grade2Text.isEmpty || grade3Text.isEmpty) {
+      setState(() {
+        resultText = 'Ju lutem plotësoni të gjitha fushat.';
+        statusText = '';
+      });
+      return;
+    }
+
+    double? grade1 = double.tryParse(grade1Text);
+    double? grade2 = double.tryParse(grade2Text);
+    double? grade3 = double.tryParse(grade3Text);
+
+    if (grade1 == null || grade2 == null || grade3 == null) {
+      setState(() {
+        resultText = 'Ju lutem shkruani vetëm numra.';
+        statusText = '';
+      });
+      return;
+    }
+
+    double average = (grade1 + grade2 + grade3) / 3;
+
+    setState(() {
+      resultText = 'Mesatarja: ${average.toStringAsFixed(2)}';
+
+      if (average >= 50) {
+        statusText = 'Statusi: Kalon';
+      } else {
+        statusText = 'Statusi: Duhet përmirësim';
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blueGrey[50],
+      appBar: AppBar(
+        title: const Text('Grade Calculator'),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            width: 420,
+            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                const Icon(
+                  Icons.calculate,
+                  size: 80,
+                  color: Colors.blue,
+                ),
+
+                const SizedBox(height: 15),
+
+                const Text(
+                  'Grade Average Calculator',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                TextField(
+                  controller: grade1Controller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Nota / Piket 1',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                TextField(
+                  controller: grade2Controller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Nota / Piket 2',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                TextField(
+                  controller: grade3Controller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Nota / Piket 3',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                ElevatedButton(
+                  onPressed: calculateAverage,
+                  child: const Text('Calculate Average'),
+                ),
+
+                const SizedBox(height: 20),
+
+                Text(
+                  resultText,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  statusText,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
