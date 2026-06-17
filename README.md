@@ -32,3 +32,17 @@ Day 1 - Task 2
 
 ## Student
 Erlis Maxhuni
+# Multi-Screen Quiz App
+
+Day 3 - Task 1
+
+## Features
+- 5 quiz questions
+- 4 options per question
+- Score tracking with state
+- Result screen
+- Restart quiz button
+- Navigation using Navigator
+
+## Student
+Erlis Maxhuni
