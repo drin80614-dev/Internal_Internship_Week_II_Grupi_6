@@ -1,0 +1,209 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const QuizApp());
+}
+
+class QuizApp extends StatelessWidget {
+  const QuizApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Quiz App',
+      home: const QuizScreen(),
+    );
+  }
+}
+
+class Question {
+  final String question;
+  final List<String> options;
+  final int correctAnswer;
+
+  Question({
+    required this.question,
+    required this.options,
+    required this.correctAnswer,
+  });
+}
+
+class QuizScreen extends StatefulWidget {
+  const QuizScreen({super.key});
+
+  @override
+  State<QuizScreen> createState() => _QuizScreenState();
+}
+
+class _QuizScreenState extends State<QuizScreen> {
+  int currentQuestion = 0;
+  int score = 0;
+
+  final List<Question> questions = [
+    Question(
+      question: 'What does Flutter use to build UI?',
+      options: ['Widgets', 'Classes', 'Functions', 'Variables'],
+      correctAnswer: 0,
+    ),
+    Question(
+      question: 'Who developed Flutter?',
+      options: ['Microsoft', 'Apple', 'Google', 'Meta'],
+      correctAnswer: 2,
+    ),
+    Question(
+      question: 'Which language is used by Flutter?',
+      options: ['Java', 'Python', 'Dart', 'C++'],
+      correctAnswer: 2,
+    ),
+    Question(
+      question: 'What widget arranges items vertically?',
+      options: ['Row', 'Column', 'Stack', 'Container'],
+      correctAnswer: 1,
+    ),
+    Question(
+      question: 'Which function starts a Flutter app?',
+      options: ['startApp()', 'run()', 'mainApp()', 'runApp()'],
+      correctAnswer: 3,
+    ),
+  ];
+
+  void answerQuestion(int selectedIndex) {
+    if (selectedIndex ==
+        questions[currentQuestion].correctAnswer) {
+      score++;
+    }
+
+    if (currentQuestion < questions.length - 1) {
+      setState(() {
+        currentQuestion++;
+      });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ResultScreen(score: score),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final question = questions[currentQuestion];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Quiz App'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 500),
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Question ${currentQuestion + 1}/${questions.length}',
+                style: const TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 20),
+
+              Text(
+                question.question,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              ...List.generate(
+                question.options.length,
+                (index) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          answerQuestion(index),
+                      child: Text(
+                        question.options[index],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ResultScreen extends StatelessWidget {
+  final int score;
+
+  const ResultScreen({
+    super.key,
+    required this.score,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Result'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment:
+                MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Quiz Finished!',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              Text(
+                'Your Score: $score / 5',
+                style: const TextStyle(
+                  fontSize: 24,
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const QuizScreen(),
+                    ),
+                  );
+                },
+                child: const Text('Restart Quiz'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
