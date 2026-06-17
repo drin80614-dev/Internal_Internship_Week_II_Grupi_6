@@ -1,0 +1,155 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class Student {
+  final String name;
+  final String email;
+
+  Student({
+    required this.name,
+    required this.email,
+  });
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Student Profiles',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const StudentPage(),
+    );
+  }
+}
+
+class StudentPage extends StatefulWidget {
+  const StudentPage({super.key});
+
+  @override
+  State<StudentPage> createState() => _StudentPageState();
+}
+
+class _StudentPageState extends State<StudentPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+
+  List<Student> students = [];
+
+  void addStudent() {
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+
+    if (name.isEmpty || email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ju lutem plotësoni të gjitha fushat'),
+        ),
+      );
+      return;
+    }
+
+    if (!email.contains('@') || !email.contains('.')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email nuk është valid'),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      students.add(
+        Student(
+          name: name,
+          email: email,
+        ),
+      );
+    });
+
+    nameController.clear();
+    emailController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Student Profiles'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Student Name',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: addStudent,
+                        child: const Text('Add Student'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            Expanded(
+              child: students.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'No students added yet',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: students.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: ListTile(
+                            leading: const CircleAvatar(
+                              child: Icon(Icons.person),
+                            ),
+                            title: Text(students[index].name),
+                            subtitle: Text(students[index].email),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
