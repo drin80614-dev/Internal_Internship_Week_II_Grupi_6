@@ -1,0 +1,165 @@
+Model Class
+class Question {
+  String question;
+  List<String> options;
+  int correctAnswer;
+
+  Question({
+    required this.question,
+    required this.options,
+    required this.correctAnswer,
+  });
+}
+
+Ky model ruan:
+
+pyetjen
+opsionet
+përgjigjen e saktë
+2. Lista e pyetjeve
+List<Question> questions = [
+  Question(
+    question: "Sa është 2 + 2?",
+    options: ["2", "3", "4", "5"],
+    correctAnswer: 2,
+  ),
+  Question(
+    question: "Kryeqyteti i Kosovës?",
+    options: ["Prizren", "Pejë", "Prishtinë", "Gjakovë"],
+    correctAnswer: 2,
+  ),
+  Question(
+    question: "Flutter përdor gjuhën?",
+    options: ["Java", "Dart", "Python", "C#"],
+    correctAnswer: 1,
+  ),
+  Question(
+    question: "Sa ditë ka java?",
+    options: ["5", "6", "7", "8"],
+    correctAnswer: 2,
+  ),
+  Question(
+    question: "Ngjyra e qiellit?",
+    options: ["Blu", "Kuqe", "Verdhë", "Gjelbër"],
+    correctAnswer: 0,
+  ),
+];
+3. Variablat e State
+int currentQuestion = 0;
+int score = 0;
+4. Funksioni për përgjigje
+void answerQuestion(int selectedIndex) {
+  if (selectedIndex ==
+      questions[currentQuestion].correctAnswer) {
+    score++;
+  }
+
+  if (currentQuestion < questions.length - 1) {
+    setState(() {
+      currentQuestion++;
+    });
+  } else {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ResultScreen(score: score),
+      ),
+    );
+  }
+}
+5. UI e pyetjeve
+Column(
+  children: [
+    Text(
+      questions[currentQuestion].question,
+      style: TextStyle(fontSize: 22),
+    ),
+
+    SizedBox(height: 20),
+
+    ...questions[currentQuestion]
+        .options
+        .asMap()
+        .entries
+        .map(
+          (option) => ElevatedButton(
+            onPressed: () {
+              answerQuestion(option.key);
+            },
+            child: Text(option.value),
+          ),
+        ),
+  ],
+)
+6. Result Screen
+class ResultScreen extends StatelessWidget {
+  final int score;
+
+  const ResultScreen({
+    super.key,
+    required this.score,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Rezultati"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center,
+          children: [
+            Text(
+              "Rezultati: $score / 5",
+              style: TextStyle(fontSize: 28),
+            ),
+
+            SizedBox(height: 20),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => QuizScreen(),
+                  ),
+                );
+              },
+              child: Text("Restart"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+Ku përdoren konceptet e Day 3?
+State
+int score = 0;
+int currentQuestion = 0;
+setState()
+setState(() {
+  currentQuestion++;
+});
+Model Class
+class Question
+List
+List<Question> questions
+Navigation
+Navigator.push(...)
+Push
+Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => ResultScreen(score: score),
+  ),
+);
+Restart
+Navigator.pushReplacement(...)
+
+ose
+
+score = 0;
+currentQuestion = 0;
